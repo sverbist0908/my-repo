@@ -2,12 +2,13 @@ formatVersion: 1
 inputs:
   cloud:
     type: string
+//this is to ask which cloud to deploy the below ubuntu image
     enum:
       - 'sve:aws'
       - 'sve:azure'
       - 'sve:vsphere'
 resources:
-  Cloud_Machine_1:
+  vm-lin-vbrew:
     type: Cloud.Machine
     metadata:
       layoutPosition:
