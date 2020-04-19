@@ -1,0 +1,20 @@
+formatVersion: 1
+inputs:
+  cloud:
+    type: string
+    enum:
+      - 'sve:aws'
+      - 'sve:azure'
+      - 'sve:vsphere'
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      image: sve-ubuntu
+      flavor: sve-small
+      constraints:
+        - tag: '${input.cloud}'
