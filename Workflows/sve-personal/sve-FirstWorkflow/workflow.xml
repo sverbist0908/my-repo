@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="00fe5c1f-4bc0-4d68-b8e2-055b77505619" icon-id="ccc63028-0b79-48ad-bf8d-4078a2d058ce" editor-version="2.0" version="0.0.2" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>sve-FirstWorkflow</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="vm" type="VC:VirtualMachine"/>
+        <param name="datastore" type="VC:Datastore"/>
+        <param name="diskIndex" type="number"/>
+        <param name="diskSize" type="number"/>
+    </input>
+    <output/>
+    <attrib name="diskIndex_1" type="number">
+        <value encoded="n">1.0</value>
+    </attrib>
+    <attrib name="IpAddress" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="username" type="string">
+        <value encoded="n">root</value>
+    </attrib>
+    <attrib name="password" type="SecureString">
+        <value encoded="n">8BR56V4DM77L61V72N65G31L21MBFBDAA1S43DB985MC7D1C88N46F73E1WB1CFFD0S433B29FOFE95E0FNC7C7B3CN120E460K9EB30CCL3390E2CKBE8576CHFD7DA55P87AB2BFQA57FD0DQ449EBABJ6F03488G4676D91N3D28AD8VB8AEF5BW2F2B32FS86B207EN33F54B8O5023649K</value>
+    </attrib>
+    <attrib name="cmd" type="string">
+        <value encoded="n">echo "- - - " &gt; /sys/class/scsi_host/host0/scan; echo "- - - " &gt; /sys/class/scsi_host/host1/scan; echo "- - - " &gt; /sys/class/scsi_host/host2/scan; parted /dev/sdb mktable gpt; parted /dev/sdb mkpart primary 0% 100%;  mkfs.ext4 /dev/sdb1; mkdir /mnt/disk2; mount /dev/sdb1 /mnt/disk2</value>
+    </attrib>
+    <attrib name="passwordAuthentication" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="515.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="link" linked-workflow-id="BD8080808080808080808080808080801BC280800122528313869552e41805bb1" comparator="0">
+        <display-name>add disk</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm">
+                <description>Virtual machine to which to add the disk</description>
+            </bind>
+            <bind name="datastore" type="VC:Datastore" export-name="datastore">
+                <description>Datastore in which to put the virtual disk file</description>
+            </bind>
+            <bind name="diskIndex" type="number" export-name="diskIndex_1">
+                <description>Disk index</description>
+            </bind>
+            <bind name="diskSize" type="number" export-name="diskSize">
+                <description>Disk size (in GB)</description>
+            </bind>
+            <bind name="diskMode" type="VC:VirtualDiskMode" export-name="">
+                <description>Disk persistence mode</description>
+            </bind>
+            <bind name="scsiBusNumber" type="number" export-name="">
+                <description>SCSI controller bus number</description>
+            </bind>
+            <bind name="thinProvisioned" type="boolean" export-name="">
+                <description>Use thin provisioning?</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item3" type="task" script-module="com.vmware.library.vc.vm.tools/vim3WaitForPrincipalIP" comparator="0">
+        <display-name>Get IP</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.library.vc.vm.tools").vim3WaitForPrincipalIP(vm,timeout,interval);
+</script>
+        <in-binding>
+            <bind name="vm" type="VC:VirtualMachine" export-name="vm">
+                <description>VM to wait for IP</description>
+            </bind>
+            <bind name="timeout" type="number" export-name="diskIndex_1">
+                <description>Timeout for the operation [min]</description>
+            </bind>
+            <bind name="interval" type="number" export-name="">
+                <description>Interval for polling rate [s]</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="IpAddress"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="275.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="link" linked-workflow-id="90808080808080808080808080808080D28080800120523434428525559a3425f" comparator="0">
+        <display-name>Format Disk</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="hostNameOrIP" type="string" export-name="IpAddress">
+                <description>Hostname or IP address of the SSH host</description>
+            </bind>
+            <bind name="port" type="number" export-name="">
+                <description>Target port</description>
+            </bind>
+            <bind name="username" type="string" export-name="username">
+                <description>Username</description>
+            </bind>
+            <bind name="password" type="SecureString" export-name="password">
+                <description>Password</description>
+            </bind>
+            <bind name="cmd" type="string" export-name="cmd">
+                <description>The SSH command to run</description>
+            </bind>
+            <bind name="passwordAuthentication" type="boolean" export-name="passwordAuthentication">
+                <description>Sets authentication to password or key file</description>
+            </bind>
+            <bind name="path" type="Path" export-name="">
+                <description>Path to the private key</description>
+            </bind>
+            <bind name="passphrase" type="SecureString" export-name="">
+                <description>Private key pass-phrase</description>
+            </bind>
+            <bind name="encoding" type="string" export-name="">
+                <description>The encoding to be used. Leave this field empty to use the default system encoding. (Example values: "UTF-8", "ISO-8859-1"...)</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="result" type="number" export-name="">
+                <description>0 = OK, Negative = Error, Positive = Number of values returned, after error text</description>
+            </bind>
+            <bind name="errorText" type="string" export-name="">
+                <description>Error text, if any</description>
+            </bind>
+            <bind name="outputText" type="string" export-name="">
+                <description>Result of running the SSH command</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="60.0" x="372.5"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>
